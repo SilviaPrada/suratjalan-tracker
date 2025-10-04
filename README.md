@@ -172,16 +172,6 @@ Aplikasi berbasis **Laravel** untuk mengelola dan melacak **Surat Jalan Pengirim
 
 ---
 
-### 4. Tracking via Peta
-- Sistem menggunakan **Leaflet.js / Mapbox** untuk menampilkan lokasi kurir.  
-- Lokasi terbaru kurir diambil dari route:  
-```
-
-/surat/{id}/locations/latest
-
-```
-- Peta akan menampilkan posisi kurir secara **real-time** berdasarkan data dari `delivery_locations`.  
-
 ## 📜 Struktur Database
 
 * **surat_jalans**
@@ -192,6 +182,3 @@ Aplikasi berbasis **Laravel** untuk mengelola dan melacak **Surat Jalan Pengirim
   Menyimpan bukti serah terima (foto, nama penerima, waktu).
 
 ---
-Project ini dibuat sebagai bagian dari **Tes Coding Staff Programmer (2025)**.
-
-```
