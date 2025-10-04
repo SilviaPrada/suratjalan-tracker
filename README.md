@@ -1,66 +1,197 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# 🚚 Sistem Tracking Surat Jalan Pengiriman
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Proyek ini adalah implementasi **Tes Coding Staff Programmer – Nomor 3**.  
+Aplikasi berbasis **Laravel** untuk mengelola dan melacak **Surat Jalan Pengiriman**, dengan fitur **auto-generate kode unik, QR Code, update lokasi, upload bukti serah terima, dan tampilan peta lokasi terkini**.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur Utama
+- Auto-generate **kode unik** surat jalan (mis: `SJ-20251004-ABCDE`).
+- Generate **QR Code** untuk setiap surat jalan.
+- Scan QR Code → update lokasi terbaru via **Geolocation API**.
+- Simpan riwayat lokasi (tracking perjalanan).
+- Upload bukti serah terima: **foto, nama penerima, tanggal & waktu**.
+- Tampilkan **peta lokasi terkini** menggunakan **Leaflet (OpenStreetMap)**.
+- Status pengiriman: `created → in_transit → delivered`.
+- Dark mode frontend menggunakan Tailwind
+---
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## 🛠️ Teknologi
+- **Framework**: Laravel 11.x
+- **Frontend**: Blade + TailwindCSS
+- **Database**: MySQL / MariaDB
+- **QR Code**: [simple-qrcode](https://github.com/SimpleSoftwareIO/simple-qrcode)
+- **Peta**: Leaflet.js (OpenStreetMap)
+- **File Upload**: Laravel Storage (Public)
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+---
 
-## Learning Laravel
+## 📦 Requirement
+- PHP 8.2+
+- Composer
+- MySQL / MariaDB
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## ⚙️ Instalasi
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+1. **Clone repository**
 
-## Laravel Sponsors
+   ```bash
+   git clone https://github.com/SilviaPrada/suratjalan-tracker.git
+   cd tracking-surat-jalan
+   ```
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+2. **Install dependensi PHP & JavaScript**
 
-### Premium Partners
+   ```bash
+   # Install library Laravel
+   composer install
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+   # Install library frontend (Tailwind, Vite, dsb)
+   npm install
+   ```
 
-## Contributing
+3. **Install library tambahan yang diperlukan**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+   ```bash
+   # Library untuk generate QR Code
+   composer require simplesoftwareio/simple-qrcode
+   ```
 
-## Code of Conduct
+4. **Salin & konfigurasikan file environment**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+   ```bash
+   cp .env.example .env
+   php artisan key:generate
+   ```
 
-## Security Vulnerabilities
+   Buka file `.env` dan sesuaikan konfigurasi database:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+   ```dotenv
+   DB_CONNECTION=mysql
+   DB_HOST=127.0.0.1
+   DB_PORT=3306
+   DB_DATABASE=tracking
+   DB_USERNAME=root
+   DB_PASSWORD=
+   ```
 
-## License
+5. **Siapkan database**
+   Jalankan migrasi sekaligus seeder untuk membuat tabel dan contoh data:
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+   ```bash
+   php artisan migrate --seed
+   ```
+
+   > Seeder otomatis akan membuat 1–2 contoh *surat jalan* lengkap dengan lokasi dummy.
+
+6. **Link storage (untuk upload foto bukti)**
+
+   ```bash
+   php artisan storage:link
+   ```
+
+7. **Build Tailwind & Asset Frontend**
+   Karena UI menggunakan TailwindCSS dengan Vite, jalankan:
+
+   ```bash
+   # Jalankan development server Vite (hot reload)
+   npm run dev
+
+   # Atau build production
+   npm run build
+   ```
+
+8. **Jalankan server Laravel**
+
+   ```bash
+   php artisan serve
+   ```
+
+   Buka browser di:
+
+   ```
+   http://localhost:8000
+   ```
+---
+
+## 🚀 Cara Penggunaan
+
+### 1. Login ke Sistem
+- **Admin**  
+  - Email: `admin@example.com`  
+  - Password: `password123`  
+  - Hak akses: Membuat, melihat, dan menghapus Surat Jalan.  
+
+- **Kurir**  
+  - Email: `kurir@example.com`  
+  - Password: `password123`  
+  - Hak akses: Melihat Surat Jalan, update lokasi, dan upload bukti serah terima.  
+
+---
+
+### 2. Alur Admin
+1. **Buat Surat Jalan**  
+   - Akses: `+ Buat Surat Jalan`  
+   - Isi data pengiriman (Sender, Receiver, Deskripsi, Lokasi( Auto generate)).  
+   - Sistem akan menyimpan data ke database dan menghasilkan **kode unik + QR Code**.  
+
+2. **Lihat Daftar & Detail Surat Jalan**  
+   - Akses Dashboard dan pilih `Detail` salah satu surat jalan.  
+   - Data ditampilkan: status, lokasi terakhir, riwayat lokasi, penerima (jika sudah terkirim).  
+   - **Catatan:** Admin tidak bisa update lokasi.  
+
+3. **Hapus Surat Jalan**  
+   - Klik tombol **Delete** pada daftar surat jalan.   
+
+4. **Logout**  
+   - Klik **Logout** untuk mengakhiri sesi.  
+
+---
+
+### 3. Alur Kurir
+1. **Scan QR Surat Jalan**  
+   - Akses Dashboard dan pilih `Detail` salah satu surat jalan. `.  
+   - Akan menampilkan detail Surat Jalan: status, qr code, lokasi, dan penerima.  
+
+2. **Update Lokasi Terkini**  
+   - Tekan tombol **Kirim Lokasi Saat Ini**.  
+   - Data GPS akan dikirim ke `/api/surat/update-location` dan disimpan ke `delivery_locations`.  
+
+3. **Upload Bukti Serah Terima (Proof of Delivery)**  
+   - Akses: `/surat/{id}/upload-proof`.  
+   - Upload foto, isi nama penerima, dan waktu.  
+   - Sistem akan menyimpan data ke `delivery_proofs` dan status berubah menjadi **Delivered**.  
+
+4. **Lihat Status Surat Jalan**  
+   - Akses `Detail` untuk melihat status, lokasi terkini, dan bukti serah terima (jika sudah ada).  
+
+5. **Logout**  
+   - Klik **Logout** untuk mengakhiri sesi.  
+
+---
+
+### 4. Tracking via Peta
+- Sistem menggunakan **Leaflet.js / Mapbox** untuk menampilkan lokasi kurir.  
+- Lokasi terbaru kurir diambil dari route:  
+```
+
+/surat/{id}/locations/latest
+
+```
+- Peta akan menampilkan posisi kurir secara **real-time** berdasarkan data dari `delivery_locations`.  
+
+## 📜 Struktur Database
+
+* **surat_jalans**
+  Menyimpan data utama surat jalan.
+* **delivery_locations**
+  Menyimpan riwayat lokasi update.
+* **delivery_proofs**
+  Menyimpan bukti serah terima (foto, nama penerima, waktu).
+
+---
+Project ini dibuat sebagai bagian dari **Tes Coding Staff Programmer (2025)**.
+
+```
